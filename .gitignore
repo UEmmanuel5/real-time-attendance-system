@@ -1,0 +1,6 @@
+__pycache__
+.idea
+back_up
+datasets
+venv
+Trainer.yml
