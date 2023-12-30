@@ -23,7 +23,7 @@ recognizer = cv2.face.LBPHFaceRecognizer_create()
 recognizer.read("Trainer.yml")
 
 # name_list = ["", "Amos", "Emmanuel", "Christine"]
-name_list = ["", "Amos", "Emmanuel"]
+name_list = ["", "Amos", "Emmanuel", "Christine", "Malick"]
 imgBackground = cv2.imread("background.png")
 number_of_predictions = 0;
 number_of_correct = 0;
@@ -31,6 +31,7 @@ start_time = time.time();
 subject = 1
 confidences = []
 course = 'Image Understanding'
+max_confidence = 60
 while True:
     ret,frame=video.read()
     gray=cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -40,9 +41,9 @@ while True:
         serial, conf = recognizer.predict(gray[y:y+h, x:x+w])
         number_of_predictions +=1
         confidences.append(conf)
-        print(serial,conf)
-        # 60
-        if serial == subject and conf <= 60:
+        # check if confidence is strong enough for the predicted value
+        # the smaller ther conf the higher the accuracy of the prediction
+        if serial == subject and conf <= max_confidence:
                 number_of_correct +=1
         # let's check the attendance
         attendance_time = datetime.now()
@@ -69,7 +70,7 @@ while True:
     end_time = time.time();
     elapsed_time = end_time - start_time
 
-    if (elapsed_time >= 360):
+    if (elapsed_time >= 3600):
         calculate_predictions(number_of_predictions, number_of_correct)
         video.release()
         cv2.destroyAllWindows()

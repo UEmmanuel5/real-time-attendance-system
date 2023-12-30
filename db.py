@@ -24,12 +24,12 @@ def mark_attendance(student_id, course,date):
     print("Attendance marked")
 
 def is_attendance_marked(student_id,course,date):
-    query = "select student_id from attendances where student_id = %s and course = %s and date = %s"
+    query = "select student_id from attendances where student_id = %s and course = %s and DATE(date) = DATE(%s)"
     check_data = (student_id, course, date)
-    print(check_data)
     connection = connect_to_db()
     cursor = connection.cursor()
     cursor.execute(query, check_data)
+    
     result = cursor.fetchone()
     if (result):
         return True
